@@ -3,7 +3,6 @@ from tkinter.ttk import Progressbar
 import time
 from threading import Thread
 
-
 ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
 
@@ -13,8 +12,6 @@ def vivre():
         progress_soif['value'] = soif.get()
         print("1 an de vie en plus")
         time.sleep(5)
-
-
 def mon_nom():
     nom.set(nom_choisi.get())
     nom_entry.grid_forget()
@@ -55,8 +52,6 @@ def dormir():
     else:
         dormir.set("reveiller")
 
-
-
 #initialisations des variables
 
 faim = IntVar()
@@ -83,13 +78,17 @@ progress_soif = Progressbar(ma_fenetre, orient = HORIZONTAL,length = 100, mode =
 progress_soif['value'] = soif.get()
   
 progress_soif.grid()
-
+#boutons pour interagir avec le tamagoshi
+can1 = Canvas(ma_fenetre, width =700, height =500, bg ='white')
+photo = PhotoImage(file ='tamagotchi_normal.gif')
+item = can1.create_image(80, 80, image =photo)
+can1.grid() 
 #information sur le tamagoshi
 
 info_nom = Label(ma_fenetre, text = "Mon nom:")
 info_nom.grid()
 nom_tama = Label(ma_fenetre, width="40", textvariable=nom)
-nom_tama.grid(row=1,column=1)
+nom_tama.grid()
 
 info_age = Label(ma_fenetre, text = "Mon age:")
 info_age.grid()
@@ -122,24 +121,20 @@ manger.grid()
 
 mon_humeur = Label(ma_fenetre, text = "humeur: ")
 mon_humeur.grid()
-jouer_ = Label(ma_fenetre, textvariable = humeur)
-jouer_.grid()
+jouer = Label(ma_fenetre, textvariable = humeur)
+jouer.grid()
 
 ma_sante = Label(ma_fenetre, text = "santé: ")
 ma_sante.grid()
-soigner_ = Label(ma_fenetre, textvariable = sante)
-soigner_.grid()
+soigner = Label(ma_fenetre, textvariable = sante)
+soigner.grid()
 
 mon_sommeil = Label(ma_fenetre, text = "sommeil: ")
-mon_sommeil.grid(row=6,column=0)
-dormir_ = Label(ma_fenetre, textvariable = sommeil)
-dormir_.grid()
+mon_sommeil.grid()
+dormir = Label(ma_fenetre, textvariable = sommeil)
+dormir.grid()
 
 #boutons pour interagir avec le tamagoshi
-can1 = Canvas(ma_fenetre, width =700, height =500, bg ='white')
-photo = PhotoImage(file ='tamagotchi_norml.gif')
-item = can1.create_image(80, 80, image =photo)
-can1.grid() 
 boisson = Menubutton(ma_fenetre, text = "Donner à boire", font =("Comic sans", 15))  
 boisson.menu = Menu(boisson, tearoff = 0) 
 boisson["menu"] = boisson.menu  
@@ -171,10 +166,9 @@ choix_r.grid()
 mon_bouton = Button(ma_fenetre,text = "activer", width=10, font =("Comic sans", 15), command = sommeil )
 mon_bouton.grid()
 
-
-# create thread to simulate life
-
 th = Thread(target=vivre)
 
 th.start()
+
+
 ma_fenetre.mainloop()
