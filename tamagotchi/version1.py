@@ -88,13 +88,13 @@ dormir.set("faire_dormir")
 progress_soif = Progressbar(ma_fenetre, orient = HORIZONTAL,length = 100, mode = 'determinate')
 progress_soif['value'] = soif.get()
   
-progress_soif.grid(row=4,column=2)
+progress_soif.grid(row=5,column=2)
 
 
-can1 = Canvas(ma_fenetre, width =800, height =600, bg ='white')
+can1 = Canvas(ma_fenetre, width =500, height =600, bg ='green')
 photo = PhotoImage(file ='tamagotchi_normal.gif')
-item = can1.create_image(100, 80, image =photo)
-can1.grid(row=3,column=2) 
+item = can1.create_image(180, 210,  image =photo)
+can1.grid(row=4,column=2) 
 
 
 
@@ -116,13 +116,13 @@ can1.grid(row=3,column=2)
 #information sur le tamagoshi
 
 info_nom = Label(ma_fenetre, text = "Mon nom:")
-info_nom.grid(sticky=N)
+info_nom.grid(row=1,column=2)
 nom_tama = Label(ma_fenetre, width="15", textvariable=nom)
-nom_tama.grid(row=0,column=2)
+nom_tama.grid(row=1,column=3)
 nom_entry = Entry(ma_fenetre, textvariable= nom_choisi , font= ("Time", 20))
-nom_entry.grid()
+nom_entry.grid(row=2,column=2)
 nom_button= Button(ma_fenetre, text="Entree", font =("Comic sans", 15), command = mon_nom )
-nom_button.grid()
+nom_button.grid(row=3,column=2)
 
 info_age = Label(ma_fenetre, text = "Mon age:")
 info_age.grid()
