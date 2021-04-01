@@ -1,4 +1,5 @@
 from tkinter import *
+import tkinter
 from tkinter.ttk import Progressbar
 import time
 from threading import Thread
@@ -8,8 +9,10 @@ ma_fenetre.title("Mon tamagotchi")
 
 def vivre():
     while True:
-        soif.set(soif.get() - 3)
+        soif.set(soif.get() - 1)
         progress_soif['value'] = soif.get()
+        faim.set(faim.get() - 1)
+        progress_faim['value'] = faim.get()
         print("1 an de vie en plus")
         time.sleep(5)
 def mon_nom():
@@ -44,13 +47,13 @@ def jouer():
 def soigner():
     sante.set(sante.get() + 20)
     etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
-
 def dormir():
-    var = compteur.get()
-    if var < 15 :
-        dormir.set("faire_dormir")
-    else:
-        dormir.set("reveiller")
+    sommeil.set(sommeil.get()+5)
+    humeur.set(humeur.get() + 5)
+    sante.set(sante.get()+2)
+    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+
+
 
 #initialisations des variables
 
@@ -70,8 +73,6 @@ etat = IntVar()
 etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
 nom = StringVar()
 nom_choisi = StringVar()
-dormir = StringVar()
-dormir.set("faire_dormir")
 
 
 
@@ -84,11 +85,8 @@ dormir.set("faire_dormir")
 
 
 
-# Progress bar widget
-progress_soif = Progressbar(ma_fenetre, orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_soif['value'] = soif.get()
-  
-progress_soif.grid(row=5,column=2)
+
+
 
 
 can1 = Canvas(ma_fenetre, width =500, height =600, bg ='green')
@@ -118,7 +116,7 @@ can1.grid(row=4,column=2)
 info_nom = Label(ma_fenetre, text = "Mon nom:")
 info_nom.grid(row=1,column=2)
 nom_tama = Label(ma_fenetre, width="15", textvariable=nom)
-nom_tama.grid(row=1,column=3)
+nom_tama.grid(row=2,column=2)
 nom_entry = Entry(ma_fenetre, textvariable= nom_choisi , font= ("Time", 20))
 nom_entry.grid(row=2,column=2)
 nom_button= Button(ma_fenetre, text="Entree", font =("Comic sans", 15), command = mon_nom )
@@ -129,41 +127,87 @@ info_age.grid()
 age_tama = Label(ma_fenetre, width="40", textvariable=age)
 age_tama.grid()
 
-info_etat = Label(ma_fenetre, text = "etat general:")
-info_etat.grid()
-etat_general = Label(ma_fenetre, width="40", textvariable=etat)
-etat_general.grid()
 
 
 
 
 
 #statisitques, ses barres d'état en théorie
+# Frame pour soif et Progress bar widget pour soif 
+Frame_indicateur = Frame(ma_fenetre, width=300,height=100,bd=2, bg="white")
+Frame_indicateur.grid(row=5,column=2)
+group_soif = Frame(Frame_indicateur,   width=200,height=40,bd=2, bg="white")
+group_soif.grid(row=0,column=0)
+progress_soif = Progressbar(group_soif,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_soif['value'] = soif.get()  
+progress_soif.grid()
 
-ma_soif = Label(ma_fenetre, text = "soif: ")
+ma_soif = Label(group_soif, text = "soif: ")
 ma_soif.grid()
-boire = Label(ma_fenetre, textvariable = soif)
+boire = Label(group_soif,text = "soif: ", textvariable = soif)
 boire.grid()
 
-ma_faim = Label(ma_fenetre, text = "faim: ")
+
+
+# Frame pour faim et Progress bar widget pour faim
+
+group_faim = Frame(Frame_indicateur,   width=100,height=40,bd=2, bg="white")
+group_faim.grid(row=0,column=1)
+progress_faim = Progressbar(group_faim,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_faim['value'] = faim.get()
+progress_faim.grid()
+
+ma_faim = Label(group_faim, text = "faim: ")
 ma_faim.grid()
-manger = Label(ma_fenetre, textvariable = faim)
+manger = Label(group_faim, textvariable = faim)
 manger.grid()
 
-mon_humeur = Label(ma_fenetre, text = "humeur: ")
+
+# Frame pour hummeur et Progress bar widget pour humeur
+group_humeur = Frame(Frame_indicateur,   width=100,height=40,bd=2, bg="white")
+group_humeur.grid(row=1,column=0)
+progress_humeur = Progressbar(group_humeur,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_humeur['value'] = humeur.get()
+progress_humeur.grid()
+mon_humeur = Label(group_humeur, text = "humeur: ")
 mon_humeur.grid()
-jouer = Label(ma_fenetre, textvariable = humeur)
-jouer.grid()
+jouee = Label(group_humeur, textvariable = humeur)
+jouee.grid()
 
-ma_sante = Label(ma_fenetre, text = "santé: ")
+# Frame pour sante et Progress bar widget pour sante
+group_sante = Frame(Frame_indicateur,   width=100,height=40,bd=2, bg="white")
+group_sante.grid(row=1,column=1)
+progress_sante = Progressbar(group_sante,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_sante['value'] = sante.get()
+progress_sante.grid()
+ma_sante = Label(group_sante, text = "santé: ")
 ma_sante.grid()
-soigner = Label(ma_fenetre, textvariable = sante)
-soigner.grid()
+soignee = Label(group_sante, textvariable = sante)
+soignee.grid()
 
-mon_sommeil = Label(ma_fenetre, text = "sommeil: ")
+# Frame pour sommeil et Progress bar widget pour sommeil
+group_sommeil = Frame(Frame_indicateur,   width=100,height=40,bd=2, bg="white")
+group_sommeil.grid(row=2,column=0)
+progress_sommeil = Progressbar(group_sommeil,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_sommeil['value'] = sante.get()
+progress_sommeil.grid()
+mon_sommeil = Label(group_sommeil, text = "sommeil: ")
 mon_sommeil.grid()
-dormir = Label(ma_fenetre, textvariable = sommeil)
-dormir.grid()
+dormiir = Label(group_sommeil, textvariable = sommeil)
+dormiir.grid()
+
+# Frame pour soif et Progress bar widget pour soif 
+group_etat = Frame(Frame_indicateur,   width=100,height=40,bd=2, bg="white")
+group_etat.grid(row=2,column=1)
+progress_etat = Progressbar(group_etat,orient = HORIZONTAL,length = 100, mode = 'determinate')
+progress_etat['value'] = soif.get()  
+progress_etat.grid()
+info_etat = Label(group_etat, text = "etat general:")
+info_etat.grid()
+etat_general = Label(group_etat, width="40", textvariable=etat)
+etat_general.grid()
+
+
 
 #boutons pour interagir avec le tamagoshi
 boisson = Menubutton(ma_fenetre, text = "Donner à boire", font =("Comic sans", 15))  
@@ -186,16 +230,12 @@ jeu.grid()
 pilule = Button(ma_fenetre, text="Donner pilule", font =("Comic sans", 15), command = soigner )
 pilule.grid()
 
+faire_dormir = Button(ma_fenetre,text="dormir",font =("Comic sans", 15), command = dormir)
+faire_dormir.grid()
 mon_label = Label(ma_fenetre, textvariable=dormir)
 mon_label.grid()
-compteur = StringVar()
-compteur.set(15)
-choix_d = Radiobutton(ma_fenetre,text = "faire_dormir",width =20, variable = compteur , value = "faire_dormir")
-choix_d.grid()
-choix_r = Radiobutton(ma_fenetre,text = "reveiller",width =20, variable = compteur , value = "reveiller")
-choix_r.grid()
-mon_bouton = Button(ma_fenetre,text = "activer", width=10, font =("Comic sans", 15), command = sommeil )
-mon_bouton.grid()
+
+
 
 th = Thread(target=vivre)
 
