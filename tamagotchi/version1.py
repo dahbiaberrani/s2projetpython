@@ -76,36 +76,6 @@ nom_choisi = StringVar()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #boutons pour interagir avec le tamagoshi
 
 #information sur le tamagoshi
@@ -121,10 +91,10 @@ nom_entry.grid(row=2,column=2)
 nom_button= Button(Frame_info, text="Entree", font =("Comic sans", 15), command = mon_nom )
 nom_button.grid(row=3,column=2)
 
-info_age = Label(ma_fenetre, text = "Mon age:")
-info_age.grid()
-age_tama = Label(ma_fenetre, width="40", textvariable=age)
-age_tama.grid()
+info_age = Label(info_nom, text = "Mon age:")
+info_age.grid(row=2,column=2)
+age_tama = Label(info_nom, width="40", textvariable=age)
+age_tama.grid(row=2,column=3)
 
 
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
@@ -138,7 +108,7 @@ can1.grid(row=4,column=2)
 # Frame pour soif et Progress bar widget pour soif 
 Frame_indicateur = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_indicateur.grid(row=0,column=0)
-group_soif = Frame(Frame_indicateur,   width=200,height=40,bd=4, bg="green")
+group_soif = Frame(Frame_indicateur,   width=200,height=40,bd=4, bg="light grey")
 group_soif.grid(row=0,column=0)
 progress_soif = Progressbar(group_soif,orient = HORIZONTAL,length = 100, mode = 'determinate')
 progress_soif['value'] = soif.get()  
