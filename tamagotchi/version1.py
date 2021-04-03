@@ -7,14 +7,64 @@ from threading import Thread
 ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
 
+
+
+
 def vivre():
     while True:
-        soif.set(soif.get() - 1)
-        progress_soif['value'] = soif.get()
-        faim.set(faim.get() - 1)
-        progress_faim['value'] = faim.get()
+        etat_soif = soif.get()
+        etat_sante = sante.get()
+        etat_sommeil = sommeil.get()
+        etat_humeur = humeur.get()
+        etat_faim = faim.get()
+
+
+
+        if etat_faim > 0:
+            faim.set(etat_faim - 5)
+            progress_faim['value'] = etat_faim - 5
+            if etat_faim -5 < 50 and etat_faim-5 > 25:
+                progress_faim['value']
         print("1 an de vie en plus")
+        time.sleep(15)
+
+        
+        if etat_soif > 0:
+            soif.set(etat_soif - 5)
+            progress_soif['value'] = etat_soif - 5
+            if etat_soif -5 < 50 and etat_soif-5 > 25:
+                progress_soif['value']
+        print("10 an de vie en plus")
+        time.sleep(8)
+       
+        if etat_humeur > 0:
+            humeur.set(etat_humeur- 5)
+            progress_humeur['value'] = etat_humeur- 5
+            if etat_humeur-1 < 50 and etat_humeur-5 > 25:
+                progress_humeur['value']
+        print("4 an de vie en plus")
         time.sleep(5)
+
+
+        if etat_sommeil > 0:
+            sommeil.set(etat_sommeil- 5)
+            progress_sommeil['value'] = etat_sommeil- 5
+            if etat_humeur-5 < 50 and etat_sommeil-5 > 25:
+                progress_sommeil['value']
+        print("2 an de vie en plus")
+        time.sleep(20)
+
+        if etat_sante > 0:
+            sante.set(etat_sante- 5)
+            progress_sante['value'] = etat_sante - 5
+            if etat_sante-5 < 50 and etat_sante-5 > 25 :
+                progress_sante['value']
+        print("5 an de vie en plus")
+        time.sleep(10)
+
+    
+
+
 def mon_nom():
     nom.set(nom_choisi.get())
     nom_entry.grid_forget()
@@ -58,11 +108,11 @@ def dormir():
 #initialisations des variables
 
 faim = IntVar()
-faim.set(50)
+faim.set(100)
 soif = IntVar()
-soif.set(50)
+soif.set(100)
 humeur = IntVar()
-humeur.set(50)
+humeur.set(100)
 sommeil = IntVar()
 sommeil.set(100)
 sante = IntVar()
@@ -91,10 +141,12 @@ nom_entry.grid(row=2,column=2)
 nom_button= Button(Frame_info, text="Entree", font =("Comic sans", 15), command = mon_nom )
 nom_button.grid(row=3,column=2)
 
-info_age = Label(info_nom, text = "Mon age:")
-info_age.grid(row=2,column=2)
-age_tama = Label(info_nom, width="40", textvariable=age)
-age_tama.grid(row=2,column=3)
+Frame_age = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
+Frame_age.grid(row=1,column=0)
+info_age = Label(Frame_age, text = "Mon age:")
+info_age.grid()
+age_tama = Label(Frame_age, width="40", textvariable=age)
+age_tama.grid()
 
 
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
