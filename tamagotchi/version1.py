@@ -18,8 +18,6 @@ def vivre():
         etat_humeur = humeur.get()
         etat_faim = faim.get()
 
-
-
         if etat_faim > 0:
             faim.set(etat_faim - 5)
             progress_faim['value'] = etat_faim - 5
