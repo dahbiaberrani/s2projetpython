@@ -3,62 +3,55 @@ import tkinter
 from tkinter.ttk import Progressbar
 import time
 from threading import Thread
-
+from tamagotchi import *
 ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
+monTamagotchi = Tamagotchi()
 
+difficulte = 20
 
+def updateGuiSoif(_soif):
+    soif.set(_soif)
+    progress_soif['value'] = _soif
 
+def updateGuiFaim(_faim):
+    faim.set(_faim)
+    progress_faim['value'] = _faim
 
-def vivre():
+def updateGuiHumeur(_humeur):
+    humeur.set(_humeur)
+    progress_humeur['value'] = _humeur
+
+def updateGuiSommeil(_sommeil):
+    sommeil.set(_sommeil)
+    progress_sommeil['value'] = _sommeil
+
+def updateGuiSante(_sante):
+    sante.set(_sante)
+    progress_sante['value'] = _sante
+
+def updateGuiEtatGeneral(_etat):
+    etat.set(_etat)
+    progress_etat['value'] = _etat
+
+def updateGuiAge(_age):
+    age.set(_age)
+
+def updateGui():
+    updateGuiSoif(monTamagotchi.getSoif())
+    updateGuiFaim(monTamagotchi.getFaim())
+    updateGuiSommeil(monTamagotchi.getSommeil())
+    updateGuiHumeur(monTamagotchi.getHumeur())
+    updateGuiSante(monTamagotchi.getSante())
+    updateGuiEtatGeneral(monTamagotchi.getEtat())
+    updateGuiAge(monTamagotchi.getAge())
+
+def runGame():
     while True:
-        etat_soif = soif.get()
-        etat_sante = sante.get()
-        etat_sommeil = sommeil.get()
-        etat_humeur = humeur.get()
-        etat_faim = faim.get()
-
-        if etat_faim > 0:
-            faim.set(etat_faim - 5)
-            progress_faim['value'] = etat_faim - 5
-            if etat_faim -5 < 50 and etat_faim-5 > 25:
-                progress_faim['value']
-        print("1 an de vie en plus")
-     
-
-        
-        if etat_soif > 0:
-            soif.set(etat_soif - 5)
-            progress_soif['value'] = etat_soif - 5
-            if etat_soif -5 < 50 and etat_soif-5 > 25:
-                progress_soif['value']
-        print("10 an de vie en plus")
-      
-       
-        if etat_humeur > 0:
-            humeur.set(etat_humeur- 5)
-            progress_humeur['value'] = etat_humeur- 5
-            if etat_humeur-1 < 50 and etat_humeur-5 > 25:
-                progress_humeur['value']
-        print("4 an de vie en plus")
-     
-
-
-        if etat_sommeil > 0:
-            sommeil.set(etat_sommeil- 5)
-            progress_sommeil['value'] = etat_sommeil- 5
-            if etat_humeur-5 < 50 and etat_sommeil-5 > 25:
-                progress_sommeil['value']
-        print("2 an de vie en plus")
-       
-
-        if etat_sante > 0:
-            sante.set(etat_sante- 5)
-            progress_sante['value'] = etat_sante - 5
-            if etat_sante-5 < 50 and etat_sante-5 > 25 :
-                progress_sante['value']
-        print("5 an de vie en plus")
-        time.sleep(20)
+        time.sleep(difficulte)
+        monTamagotchi.vivre()
+        updateGui()
+        print("Un an de vie en plus")
 
     
 
@@ -103,22 +96,17 @@ def dormir():
 
 
 
-#initialisations des variables
+
+
+
 
 faim = IntVar()
-faim.set(50)
 soif = IntVar()
-soif.set(50)
 humeur = IntVar()
-humeur.set(50)
 sommeil = IntVar()
-sommeil.set(100)
 sante = IntVar()
-sante.set(100)
 age = IntVar()
-age.set(0)
 etat = IntVar()
-etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
 nom = StringVar()
 nom_choisi = StringVar()
 
@@ -218,11 +206,11 @@ mon_sommeil.grid()
 dormiir = Label(group_sommeil, textvariable = sommeil)
 dormiir.grid()
 
-# Frame pour soif et Progress bar widget pour soif 
+# Frame pour etat général et Progress bar widget pour etat général
 group_etat = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
 group_etat.grid()
 progress_etat = Progressbar(group_etat,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_etat['value'] = soif.get()  
+progress_etat['value'] = etat.get()  
 progress_etat.grid()
 info_etat = Label(group_etat, text = "etat general:")
 info_etat.grid()
@@ -260,10 +248,11 @@ mon_label = Label(Frame_button, textvariable=dormir)
 mon_label.grid(row=0,column=5)
 
 
+#Thread pour executer en boucle la fonction vivre
+vivreThread = Thread(target=runGame)
 
-th = Thread(target=vivre)
-
-th.start()
-
-
+#initialisations de l'interface graphique
+updateGui()
+#lancement du jeu
+vivreThread.start()
 ma_fenetre.mainloop()

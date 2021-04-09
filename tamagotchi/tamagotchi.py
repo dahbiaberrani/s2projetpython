@@ -1,3 +1,4 @@
+import random
 class Tamagotchi:
     #initialisations des variables
     def __init__(self):      
@@ -8,16 +9,21 @@ class Tamagotchi:
         self.sommeil = 100
         self.sante = 100
         self.age = 0
-        self.etat = "normal"
-
+        self.etat = (self.humeur + self.sante + self.faim + self.sommeil + self.soif) / 5
+    # Impression
+    def __str__(self):
+        return "{"+"Nom:"+str(self.name)+'\n'+"Age:"+str(self.age)+'\n'+"Etat:"+str(self.etat)+'\n'+"Faim:"+str(self.faim)+'\n'+"Soif:"+str(self.soif)+'\n'+"Sommeil:"+str(self.sommeil)+'\n'+"Santé:"+str(self.sante)+'\n'+"Hummeur:"+str(self.humeur)+'\n'+"}"
     #getters
     def getName(self):
         return self.name
     
     def getFaim(self):
         return self.faim
+
+    def getSoif(self):
+        return self.soif
     
-    def getHummeur(self):
+    def getHumeur(self):
         return self.humeur
     
     def getSommeil(self):
@@ -39,7 +45,10 @@ class Tamagotchi:
     def setFaim(self,_faim):
         self.faim = _faim
 
-    def setHummeur(self,_hummeur):
+    def setSoif(self, _soif):
+        self.soif = _soif
+
+    def setHumeur(self,_hummeur):
         self.humeur = _hummeur
     
     def setSommeil(self,_sommeil):
@@ -51,5 +60,25 @@ class Tamagotchi:
     def setAge(self, _age):
         self.age = _age
 
-    def setEtat(self, _etat):
-        self.etat = _etat
+    def updateEtat(self):
+        self.etat = (self.humeur + self.sante + self.faim + self.sommeil + self.soif) / 5
+        
+    #Mise à jour de l'Etat
+
+    # Fonction qui permet de vivre un instant de la vie, elle décrémente les caractéristiques d'un nombre aléatoire compris entre 1 et 10
+    # chaque décrémentation et indépendante de l'autre pour ne pas diminué les caractéristiques d'un même nombre
+    # l'age est au contraire pas diminué aléatoirement mais augmenté de 1 
+    # l'Etat est remis à jours selon est calculé à partir des autres caractéristiques
+    # le nom reste inchangé
+    # On permet pas d'avoir des valeur négatives, le minimum est donc 0
+    def vivre(self):
+        #Generation de 5 nombres alétoires compris entre 1 et 10
+        randomlist = random.sample(range(1, 10), 5)
+        self.sante -= randomlist[0]
+        self.faim -= randomlist[1]
+        self.humeur -= randomlist[2]
+        self.soif -= randomlist[3]
+        self.sommeil -=randomlist[4]
+        self.age += 1
+        self.updateEtat()
+
