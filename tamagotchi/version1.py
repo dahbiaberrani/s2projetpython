@@ -8,7 +8,7 @@ ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
 monTamagotchi = Tamagotchi()
 
-difficulte = 20
+difficulte = 2
 
 def updateGuiSoif(_soif):
     soif.set(_soif)

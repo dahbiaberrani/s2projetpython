@@ -71,14 +71,31 @@ class Tamagotchi:
     # l'Etat est remis à jours selon est calculé à partir des autres caractéristiques
     # le nom reste inchangé
     # On permet pas d'avoir des valeur négatives, le minimum est donc 0
+    # si l'une des caractéristiques est à 0 ou l'age est à 200 ans alors le tamagotchi est mort
     def vivre(self):
         #Generation de 5 nombres alétoires compris entre 1 et 10
         randomlist = random.sample(range(1, 10), 5)
+
         self.sante -= randomlist[0]
+        if self.sante < 0:
+            self.sante = 0
+
         self.faim -= randomlist[1]
+        if self.faim < 0:
+            self.faim = 0
+
         self.humeur -= randomlist[2]
+        if self.humeur < 0:
+            self.humeur = 0
+
         self.soif -= randomlist[3]
+        if self.soif < 0:
+            self.soif = 0
+
         self.sommeil -=randomlist[4]
+        if self.sommeil < 0:
+            self.sommeil = 0
+
         self.age += 1
         self.updateEtat()
 
