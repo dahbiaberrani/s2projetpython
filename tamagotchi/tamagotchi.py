@@ -1,7 +1,7 @@
 class Tamagotchi:
     #initialisations des variables
-    def __init__(self, name):      
-        self.name = name
+    def __init__(self):      
+        self.name = ""
         self.faim = 50
         self.soif = 50
         self.humeur = 50
@@ -51,4 +51,5 @@ class Tamagotchi:
     def setAge(self, _age):
         self.age = _age
 
-    def setEtat()
+    def setEtat(self, _etat):
+        self.etat = _etat
