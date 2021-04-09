@@ -26,7 +26,7 @@ def vivre():
             if etat_faim -5 < 50 and etat_faim-5 > 25:
                 progress_faim['value']
         print("1 an de vie en plus")
-        time.sleep(15)
+     
 
         
         if etat_soif > 0:
@@ -35,7 +35,7 @@ def vivre():
             if etat_soif -5 < 50 and etat_soif-5 > 25:
                 progress_soif['value']
         print("10 an de vie en plus")
-        time.sleep(8)
+      
        
         if etat_humeur > 0:
             humeur.set(etat_humeur- 5)
@@ -43,7 +43,7 @@ def vivre():
             if etat_humeur-1 < 50 and etat_humeur-5 > 25:
                 progress_humeur['value']
         print("4 an de vie en plus")
-        time.sleep(5)
+     
 
 
         if etat_sommeil > 0:
@@ -52,7 +52,7 @@ def vivre():
             if etat_humeur-5 < 50 and etat_sommeil-5 > 25:
                 progress_sommeil['value']
         print("2 an de vie en plus")
-        time.sleep(20)
+       
 
         if etat_sante > 0:
             sante.set(etat_sante- 5)
@@ -60,7 +60,7 @@ def vivre():
             if etat_sante-5 < 50 and etat_sante-5 > 25 :
                 progress_sante['value']
         print("5 an de vie en plus")
-        time.sleep(10)
+        time.sleep(20)
 
     
 
@@ -108,11 +108,11 @@ def dormir():
 #initialisations des variables
 
 faim = IntVar()
-faim.set(100)
+faim.set(50)
 soif = IntVar()
-soif.set(100)
+soif.set(50)
 humeur = IntVar()
-humeur.set(100)
+humeur.set(50)
 sommeil = IntVar()
 sommeil.set(100)
 sante = IntVar()
@@ -150,7 +150,7 @@ age_tama.grid()
 
 
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
-photo = PhotoImage(file ='tamagotchi_normal.gif')
+photo = PhotoImage(file ='tamagotchi_dorme.gif')
 item = can1.create_image(180, 210,  image =photo)
 can1.grid(row=4,column=2) 
 
