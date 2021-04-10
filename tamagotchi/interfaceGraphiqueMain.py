@@ -180,6 +180,10 @@ def mon_nom():
         nom_button.destroy()
         lancerJeu()
 
+def selectDifficulte():
+    global difficulte
+    difficulte = choixDifficulteJeu.get()
+
 def boire_eau():
     monTamagotchi.boireEau()
     updateGui()
@@ -227,7 +231,9 @@ nom_choisi = StringVar()
 
 
 
-#information sur le nom de tamagoshi
+#informations et apramètres à choisir par l'utlisateur avant le lancement du jeu 
+
+# Choix du niom du tamagotchi
 Frame_info = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_info.grid(row=0,column=1)
 
@@ -240,6 +246,22 @@ nom_entry.grid(row=2,column=2)
 nom_button= Button(Frame_info, text="Entree", font =("Comic sans", 15), command = mon_nom )
 nom_button.grid(row=3,column=2)
 
+# choix du niveau du jeu parmis les options: facile, moyen, difficile
+# Frame pour le choix de la difficulté du jeu
+Frame_difficulte = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
+Frame_difficulte .grid(row=0,column=0)
+
+choixDifficulteJeu = IntVar()
+R1 = Radiobutton(Frame_difficulte , text="Facile", variable=choixDifficulteJeu, value = 25,command=selectDifficulte)
+R1.pack( anchor = W )
+
+R2 = Radiobutton(Frame_difficulte , text="Moyen", variable=choixDifficulteJeu, value=10,command=selectDifficulte)
+R2.select() # niveau moyen selectionner par defaut
+R2.pack( anchor = W )
+
+R3 = Radiobutton(Frame_difficulte , text="Difficile", variable=choixDifficulteJeu, value=5,command=selectDifficulte)
+R3.pack( anchor = W )*
+
 #Photo représentative de Tamagotchi
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
 photo = PhotoImage(file ='./ressources/tamagotchi_welcome.gif')
@@ -248,7 +270,7 @@ can1.grid(row=4,column=2)
 
 #statisitques, ses barres d'état en théorie
 Frame_indicateur = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
-Frame_indicateur.grid(row=0,column=0)
+
 
 # Frame pour soif et Progress bar widget pour soif 
 group_soif = Frame(Frame_indicateur,   width=200,height=40,bd=4, bg="light grey")
@@ -381,6 +403,8 @@ def lancerJeu():
     vivreThread = Thread(target=runGame)
     #initialisations de l'interface graphique
     Frame_button.grid(row=1,column=1)
+    Frame_indicateur.grid(row=0,column=0)
+    Frame_difficulte.destroy()
     updateGui()
     #lancement du jeu
     vivreThread.start()
