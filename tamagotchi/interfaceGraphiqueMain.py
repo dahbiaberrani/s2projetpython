@@ -94,13 +94,17 @@ def updateGuiImage(_state):
     global photo
         
     if _state == "mort":
-        photo = photo = PhotoImage(file ='tamagotchi_mort.gif')
+        photo = photo = PhotoImage(file ='./ressources/tamagotchi_mort.gif')
+        can1.configure(bg='red')
     elif _state == "dort":
-        photo = photo = PhotoImage(file ='tamagotchi_dorme.gif')
+        photo = photo = PhotoImage(file ='./ressources/tamagotchi_dorme.gif')
+        can1.configure(bg='black')
     elif _state == "malade" :
-        photo = photo = PhotoImage(file ='tamagotchi_malade.gif')
+        photo = photo = PhotoImage(file ='./ressources/tamagotchi_malade.gif')
+        can1.configure(bg='orange')
     else: #normal
-        photo = PhotoImage(file ='tamagotchi_normal.gif')
+        photo = PhotoImage(file ='./ressources/tamagotchi_normal.gif')
+        can1.configure(bg='green')
 
     can1.itemconfigure(item , image = photo)
 
@@ -129,17 +133,15 @@ def enableActionButtons():
 
 
 def updateGuiButtons(_state):
-    print(_state)
     if _state != "mort":
         if _state == "dort":
             faire_dormir.configure(text="reveiller",command = reveiller)
-            disableActionButtons()
-            
+            disableActionButtons()       
         else:
             faire_dormir.configure(text="dormir",command = dormir)
             enableActionButtons()
     else:
-        #si mort alors desactiver tous les boutons d'interactions
+        #si mort alors detruire tous les boutons d'interactions
         Frame_button.destroy()
 
             
@@ -240,7 +242,7 @@ nom_button.grid(row=3,column=2)
 
 #Photo représentative de Tamagotchi
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
-photo = PhotoImage(file ='tamagotchi_welcome.gif')
+photo = PhotoImage(file ='./ressources/tamagotchi_welcome.gif')
 item = can1.create_image(180, 210,  image =photo)
 can1.grid(row=4,column=2) 
 
