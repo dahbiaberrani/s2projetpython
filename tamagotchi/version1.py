@@ -11,7 +11,7 @@ monTamagotchi = Tamagotchi()
 
 difficulte = 10
 gif_index = 0
-refreshIntervalTime = 50
+gifRefreshIntervalTime = 50
 #Différentes couleur pour les progress bars ( vert, Orange, rouge)
 #Vert
 progressBarStyleVert = tkinter.ttk.Style()
@@ -87,7 +87,7 @@ def updateGuiImage(_state):
     global photo
         
     if _state == "mort":
-        photo = photo = PhotoImage(file ='tamagotchi_mort.png')
+        photo = photo = PhotoImage(file ='tamagotchi_mort.gif')
     elif _state == "dort":
         photo = photo = PhotoImage(file ='tamagotchi_dorme.gif')
     elif _state == "malade" :
@@ -98,15 +98,19 @@ def updateGuiImage(_state):
     can1.itemconfigure(item , image = photo)
 
 
-def updateSleepAwakeButton(_state):
-    print("State=", _state)
+def updateGuiButtons(_state):
+    print(_state)
     if _state != "mort":
         if _state == "dort":
-            faire_dormir.pack_forget()
-            faire_reveiller.grid(row=0,column=4)
+            faire_dormir.configure(text="reveiller",command = reveiller)
+            
         else:
-            faire_reveiller.pack_forget()
-            faire_dormir.grid(row=0,column=4)
+            faire_dormir.configure(text="dormir",command = dormir)
+    else:
+        #si mort alors desactiver tous les boutons d'interactions
+        Frame_button.destroy()
+
+            
 
 def nextImageFrame():
     global gif_index
@@ -118,7 +122,7 @@ def nextImageFrame():
             gif_index = 0
             return nextImageFrame()
         else:
-            ma_fenetre.after(refreshIntervalTime, nextImageFrame)
+            ma_fenetre.after(gifRefreshIntervalTime, nextImageFrame)
 
 #Fonction pour la mise à jour de tous les élements de l'interface graphique
 def updateGui():
@@ -130,7 +134,7 @@ def updateGui():
     updateGuiEtatGeneral(monTamagotchi.getEtat())
     updateGuiAge(monTamagotchi.getAge())
     updateGuiImage(monTamagotchi.getState())
-    updateSleepAwakeButton(monTamagotchi.getState())
+    updateGuiButtons(monTamagotchi.getState())
 
 #Fonctions d'action sur le tamagotchi
 def mon_nom():
@@ -201,7 +205,7 @@ nom_button.grid(row=3,column=2)
 
 #Photo représentative de Tamagotchi
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
-photo = PhotoImage(file ='tamagotchi_dorme.gif')
+photo = PhotoImage(file ='tamagotchi_welcome.gif')
 item = can1.create_image(180, 210,  image =photo)
 can1.grid(row=4,column=2) 
 
@@ -295,7 +299,7 @@ Frame_age.grid()
 
 #boutons pour interagir avec le tamagoshi
 Frame_button = Frame(ma_fenetre, width=900,height=200,bd=10, bg="grey")
-Frame_button.grid(row=1,column=1)
+
 boisson = Menubutton(Frame_button, text = "Donner à boire", font =("Comic sans", 15))  
 boisson.menu = Menu(boisson, tearoff = 0) 
 boisson["menu"] = boisson.menu  
@@ -318,12 +322,11 @@ pilule.grid(row=0,column=3)
 
 faire_dormir = Button(Frame_button,text="dormir",font =("Comic sans", 15), command = dormir)
 faire_dormir.grid(row=0,column=4)
-mon_label = Label(Frame_button, textvariable=dormir)
-mon_label.grid(row=0,column=5)
 
 faire_reveiller = Button(Frame_button,text="reveiller",font =("Comic sans", 15), command = reveiller)
-faire_dormir.grid(row=0,column=4)
-faire_reveiller.pack_forget()
+
+
+
 # focntions à exxecuter par le thread de vivre
 def runGame():
     while True:
@@ -340,6 +343,7 @@ def lancerJeu():
     #Thread pour executer en boucle la fonction vivre
     vivreThread = Thread(target=runGame)
     #initialisations de l'interface graphique
+    Frame_button.grid(row=1,column=1)
     updateGui()
     #lancement du jeu
     vivreThread.start()
