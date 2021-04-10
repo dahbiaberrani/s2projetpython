@@ -8,11 +8,13 @@ ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
 monTamagotchi = Tamagotchi()
 #Parametres du jeux
-
 difficulte = 10
+
+#paramètres pour l'animation des images gif
 gif_index = 0
 gifRefreshIntervalTime = 50
-#Différentes couleur pour les progress bars ( vert, Orange, rouge)
+
+#Différentes couleurs pour les progress bars ( vert, Orange, rouge)
 #Vert
 progressBarStyleVert = tkinter.ttk.Style()
 progressBarStyleVert.theme_use("classic")
@@ -28,7 +30,7 @@ progressBarStyleRouge = tkinter.ttk.Style()
 progressBarStyleRouge.theme_use("classic")
 progressBarStyleRouge.configure("red.Horizontal.TProgressbar", background='red')
 
-
+# fonction pour changer la couleur d'une progress bar donnée en paramètre selon la valeur donnée en apramètre
 def updateProgressBarColor(progressbar, value):
     if value < 25:
         progressbar.configure(style="red.Horizontal.TProgressbar")
@@ -36,7 +38,10 @@ def updateProgressBarColor(progressbar, value):
         progressbar.configure(style="orange.Horizontal.TProgressbar")  
     else:
         progressbar.configure(style="green.Horizontal.TProgressbar")
-
+# foction pour mettre a jour la progress bar de l'age (les couleurs fonctionnent à l'inverse des autres bars)
+# a l'etat très vieux (age > 90 ans) la couleur est rouge
+# a l'etat vieux (age > 70 ans) la couleur est orange
+# a l'etat jeune (age < 70 ans) la couleur est verte
 def updateAgeProbressBarColor(age):
     #si age est > a 90% de l'age de la mort alors couleur rouge
     if age > 90 :
@@ -83,7 +88,9 @@ def updateGuiAge(_age):
     progress_age['value'] = _age
     updateAgeProbressBarColor(_age)
 
+# focntion de mise à jour de l'image affichée selon l'activité actuelle de tamagotchi
 def updateGuiImage(_state):
+    # variable globale de la photo msie dans le caneva
     global photo
         
     if _state == "mort":
@@ -97,15 +104,40 @@ def updateGuiImage(_state):
 
     can1.itemconfigure(item , image = photo)
 
+# desactivation de tous les boutton et activation du bouton reveiller  pour reveiller Tamagotchi
+def disableActionButtons():
+    #désactivation des boutons
+    boisson.grid_forget()
+    frigo.grid_forget()
+    jeu.grid_forget()
+    pilule.grid_forget()
+    faire_dormir.grid_forget()
+    #Activation du bouton reveiller
+    faire_reveiller.grid(row=0,column=4)
+
+# activation de tous les boutons et desactivation du bouton reveiller car tamagotchi est déjà reveillé
+def enableActionButtons():
+    #Activation des bouton
+    boisson.grid(row=0,column=0)
+    frigo.grid(row=0,column=1)
+    jeu.grid(row=0,column=2)
+    pilule.grid(row=0,column=3)
+    faire_dormir.grid(row=0,column=4)
+    #Désactivation du bouton reveiller
+    faire_reveiller.grid_forget()
+
+
 
 def updateGuiButtons(_state):
     print(_state)
     if _state != "mort":
         if _state == "dort":
             faire_dormir.configure(text="reveiller",command = reveiller)
+            disableActionButtons()
             
         else:
             faire_dormir.configure(text="dormir",command = dormir)
+            enableActionButtons()
     else:
         #si mort alors desactiver tous les boutons d'interactions
         Frame_button.destroy()
@@ -138,10 +170,13 @@ def updateGui():
 
 #Fonctions d'action sur le tamagotchi
 def mon_nom():
-    nom.set(nom_choisi.get())
-    nom_entry.grid_forget()
-    nom_button.grid_forget()
-    lancerJeu()
+    nomDonne = nom_choisi.get()
+    if nomDonne != "":
+        monTamagotchi.setName(nomDonne)
+        nom.set(monTamagotchi.getName())
+        nom_entry.destroy()
+        nom_button.destroy()
+        lancerJeu()
 
 def boire_eau():
     monTamagotchi.boireEau()

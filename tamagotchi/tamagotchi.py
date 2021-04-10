@@ -1,5 +1,6 @@
 import random
-
+#Valeur par defaut des carctéristique numériques à la naissance de Tamagotchi (au démarrage du jeu)
+DEFAULT_NUMERIC_VALUE = 60
 #Fonction pour ne par dépasser 100% ou descendre en dessous de 0% des caractéristiques
 def valeurEntreBorne(valeur):
         if valeur > 100 :
@@ -13,11 +14,11 @@ class Tamagotchi:
     #initialisations des variables
     def __init__(self):      
         self.name = ""
-        self.faim = 50
-        self.soif = 50
-        self.humeur = 50
-        self.sommeil = 100
-        self.sante = 100
+        self.faim = DEFAULT_NUMERIC_VALUE 
+        self.soif = DEFAULT_NUMERIC_VALUE 
+        self.humeur = DEFAULT_NUMERIC_VALUE 
+        self.sommeil = DEFAULT_NUMERIC_VALUE 
+        self.sante = DEFAULT_NUMERIC_VALUE 
         self.age = 0
         self.etat = (self.humeur + self.sante + self.faim + self.sommeil + self.soif) / 5
         self.state = "normal"
@@ -115,7 +116,7 @@ class Tamagotchi:
         
     # Fonction qui permet de vivre un instant de la vie, 
     # elle décrémente les caractéristiques d'un nombre aléatoire compris entre 1 et 10 si tamagotchi ne dort pas le someil est aussi diminué
-    # si tamagotchi dort alors le sommeil est incrémenté de 1.
+    # si tamagotchi dort alors le sommeil est incrémenté de 15.
    
     def vivre(self):     
         #Generation de 5 nombres alétoires compris entre 1 et 10
@@ -129,7 +130,7 @@ class Tamagotchi:
         if not self.sleeping:
                 self.setSommeil(self.sommeil - randomlist[4])      
         else:
-            self.setSommeil(self.sommeil + 1)
+            self.setSommeil(self.sommeil + 15)
                 
 
     #Fonctions d'action sur le  ne marche que si tamagotchi ne dort pas
