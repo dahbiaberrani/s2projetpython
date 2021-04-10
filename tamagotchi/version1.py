@@ -7,36 +7,120 @@ from tamagotchi import *
 ma_fenetre = Tk()
 ma_fenetre.title("Mon tamagotchi")
 monTamagotchi = Tamagotchi()
+#Parametres du jeux
 
-difficulte = 2
+difficulte = 10
+gif_index = 0
+refreshIntervalTime = 50
+#Différentes couleur pour les progress bars ( vert, Orange, rouge)
+#Vert
+progressBarStyleVert = tkinter.ttk.Style()
+progressBarStyleVert.theme_use("classic")
+progressBarStyleVert.configure("green.Horizontal.TProgressbar", background='green')
 
+#Orange
+progressBarStyleVert = tkinter.ttk.Style()
+progressBarStyleVert.theme_use("classic")
+progressBarStyleVert.configure("orange.Horizontal.TProgressbar", background='orange')
+
+#Rouge
+progressBarStyleRouge = tkinter.ttk.Style()
+progressBarStyleRouge.theme_use("classic")
+progressBarStyleRouge.configure("red.Horizontal.TProgressbar", background='red')
+
+
+def updateProgressBarColor(progressbar, value):
+    if value < 25:
+        progressbar.configure(style="red.Horizontal.TProgressbar")
+    elif value < 50:
+        progressbar.configure(style="orange.Horizontal.TProgressbar")  
+    else:
+        progressbar.configure(style="green.Horizontal.TProgressbar")
+
+def updateAgeProbressBarColor(age):
+    #si age est > a 90% de l'age de la mort alors couleur rouge
+    if age > 90 :
+        progress_age.configure(style="red.Horizontal.TProgressbar")
+    #si age est > a 70% de l'age de la mort alors couleur orange
+    elif age > 70 :
+        progress_age.configure(style="orange.Horizontal.TProgressbar")  
+    else:
+        progress_age.configure(style="green.Horizontal.TProgressbar")
+
+#Fonctions pour la mise à jour des élements de l'interface graphique
 def updateGuiSoif(_soif):
     soif.set(_soif)
     progress_soif['value'] = _soif
+    updateProgressBarColor(progress_soif,_soif)
 
 def updateGuiFaim(_faim):
     faim.set(_faim)
     progress_faim['value'] = _faim
+    updateProgressBarColor(progress_faim,_faim)
 
 def updateGuiHumeur(_humeur):
     humeur.set(_humeur)
     progress_humeur['value'] = _humeur
+    updateProgressBarColor(progress_humeur,_humeur)
 
 def updateGuiSommeil(_sommeil):
     sommeil.set(_sommeil)
     progress_sommeil['value'] = _sommeil
+    updateProgressBarColor(progress_sommeil,_sommeil)
 
 def updateGuiSante(_sante):
     sante.set(_sante)
     progress_sante['value'] = _sante
+    updateProgressBarColor(progress_sante,_sante)
 
 def updateGuiEtatGeneral(_etat):
     etat.set(_etat)
     progress_etat['value'] = _etat
+    updateProgressBarColor(progress_etat,_etat)
 
 def updateGuiAge(_age):
     age.set(_age)
+    progress_age['value'] = _age
+    updateAgeProbressBarColor(_age)
 
+def updateGuiImage(_state):
+    global photo
+        
+    if _state == "mort":
+        photo = photo = PhotoImage(file ='tamagotchi_mort.png')
+    elif _state == "dort":
+        photo = photo = PhotoImage(file ='tamagotchi_dorme.gif')
+    elif _state == "malade" :
+        photo = photo = PhotoImage(file ='tamagotchi_malade.gif')
+    else: #normal
+        photo = PhotoImage(file ='tamagotchi_normal.gif')
+
+    can1.itemconfigure(item , image = photo)
+
+
+def updateSleepAwakeButton(_state):
+    print("State=", _state)
+    if _state != "mort":
+        if _state == "dort":
+            faire_dormir.pack_forget()
+            faire_reveiller.grid(row=0,column=4)
+        else:
+            faire_reveiller.pack_forget()
+            faire_dormir.grid(row=0,column=4)
+
+def nextImageFrame():
+    global gif_index
+    if monTamagotchi.getState() != "mort":
+        try:
+            photo.configure(format="gif -index {}".format(gif_index))
+            gif_index += 1
+        except tkinter.TclError:
+            gif_index = 0
+            return nextImageFrame()
+        else:
+            ma_fenetre.after(refreshIntervalTime, nextImageFrame)
+
+#Fonction pour la mise à jour de tous les élements de l'interface graphique
 def updateGui():
     updateGuiSoif(monTamagotchi.getSoif())
     updateGuiFaim(monTamagotchi.getFaim())
@@ -45,59 +129,47 @@ def updateGui():
     updateGuiSante(monTamagotchi.getSante())
     updateGuiEtatGeneral(monTamagotchi.getEtat())
     updateGuiAge(monTamagotchi.getAge())
+    updateGuiImage(monTamagotchi.getState())
+    updateSleepAwakeButton(monTamagotchi.getState())
 
-def runGame():
-    while True:
-        time.sleep(difficulte)
-        monTamagotchi.vivre()
-        updateGui()
-        print("Un an de vie en plus")
-
-    
-
-
+#Fonctions d'action sur le tamagotchi
 def mon_nom():
     nom.set(nom_choisi.get())
     nom_entry.grid_forget()
     nom_button.grid_forget()
+    lancerJeu()
 
 def boire_eau():
-    soif.set(soif.get() + 15)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.boireEau()
+    updateGui()
 
 def boire_cafe():
-    soif.set(soif.get() + 5)
-    sommeil.set(sommeil.get() + 10)
-    sante.set(sante.get() - 5)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.boireCafe()
+    updateGui()
 
 def manger_gateau():
-    faim.set(faim.get() + 10)
-    humeur.set(humeur.get() + 10)
-    sante.set(sante.get() - 5)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.mangerGateau()
+    updateGui()
 
 def manger_salade():
-    faim.set(faim.get() + 15)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.mangerSalade()
+    updateGui()
 
 def jouer():
-    humeur.set(humeur.get() + 10)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.jouer()
+    updateGui()
 
 def soigner():
-    sante.set(sante.get() + 20)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.soigner()
+    updateGui()
+
 def dormir():
-    sommeil.set(sommeil.get()+5)
-    humeur.set(humeur.get() + 5)
-    sante.set(sante.get()+2)
-    etat.set(( sante.get() + sommeil.get() + humeur.get() + soif.get() + faim.get()) / 5)
+    monTamagotchi.dormir()
+    updateGui()
 
-
-
-
-
+def reveiller():
+    monTamagotchi.reveiller()
+    updateGui()
 
 
 faim = IntVar()
@@ -112,9 +184,9 @@ nom_choisi = StringVar()
 
 
 
-#boutons pour interagir avec le tamagoshi
 
-#information sur le tamagoshi
+
+#information sur le nom de tamagoshi
 Frame_info = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_info.grid(row=0,column=1)
 
@@ -127,97 +199,99 @@ nom_entry.grid(row=2,column=2)
 nom_button= Button(Frame_info, text="Entree", font =("Comic sans", 15), command = mon_nom )
 nom_button.grid(row=3,column=2)
 
-Frame_age = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
-Frame_age.grid(row=1,column=0)
-info_age = Label(Frame_age, text = "Mon age:")
-info_age.grid()
-age_tama = Label(Frame_age, width="40", textvariable=age)
-age_tama.grid()
-
-
+#Photo représentative de Tamagotchi
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
 photo = PhotoImage(file ='tamagotchi_dorme.gif')
 item = can1.create_image(180, 210,  image =photo)
 can1.grid(row=4,column=2) 
 
-
-
 #statisitques, ses barres d'état en théorie
-# Frame pour soif et Progress bar widget pour soif 
 Frame_indicateur = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_indicateur.grid(row=0,column=0)
+
+# Frame pour soif et Progress bar widget pour soif 
 group_soif = Frame(Frame_indicateur,   width=200,height=40,bd=4, bg="light grey")
-group_soif.grid(row=0,column=0)
-progress_soif = Progressbar(group_soif,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_soif['value'] = soif.get()  
-progress_soif.grid()
-
+#indicateurs de la soif
 ma_soif = Label(group_soif, text = "soif: ")
-ma_soif.grid()
+progress_soif = Progressbar(group_soif,orient = HORIZONTAL,length = 100, mode = 'determinate') 
 boire = Label(group_soif,text = "soif: ", textvariable = soif)
-boire.grid()
-
-
+#mise en page des indicateurs de la soif
+ma_soif.grid(row=0,column=0)
+progress_soif.grid(row=0,column=1)
+boire.grid(row=0,column=2)
+group_soif.grid()
 
 # Frame pour faim et Progress bar widget pour faim
-
 group_faim = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
-group_faim.grid()
-progress_faim = Progressbar(group_faim,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_faim['value'] = faim.get()
-progress_faim.grid()
-
+#indicateurs de la faim
 ma_faim = Label(group_faim, text = "faim: ")
-ma_faim.grid()
+progress_faim = Progressbar(group_faim,orient = HORIZONTAL,length = 100, mode = 'determinate')
 manger = Label(group_faim, textvariable = faim)
-manger.grid()
-
+#mise en page des indicateurs de la faim
+ma_faim.grid(row=0,column=0)
+progress_faim.grid(row=0,column=1)
+manger.grid(row=0,column=2)
+group_faim.grid()
 
 # Frame pour hummeur et Progress bar widget pour humeur
 group_humeur = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
-group_humeur.grid()
-progress_humeur = Progressbar(group_humeur,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_humeur['value'] = humeur.get()
-progress_humeur.grid()
+#inducateurs de l'humeur
 mon_humeur = Label(group_humeur, text = "humeur: ")
-mon_humeur.grid()
+progress_humeur = Progressbar(group_humeur,orient = HORIZONTAL,length = 100, mode = 'determinate')
 jouee = Label(group_humeur, textvariable = humeur)
-jouee.grid()
+#Mise en page des indicateurs de l'humeur
+mon_humeur.grid(row=0,column=0)
+progress_humeur.grid(row=0,column=1)
+jouee.grid(row=0,column=2)
+group_humeur.grid()
 
 # Frame pour sante et Progress bar widget pour sante
 group_sante = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
-group_sante.grid()
-progress_sante = Progressbar(group_sante,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_sante['value'] = sante.get()
-progress_sante.grid()
+#Indicateur de la santé
 ma_sante = Label(group_sante, text = "santé: ")
-ma_sante.grid()
+progress_sante = Progressbar(group_sante,orient = HORIZONTAL,length = 100, mode = 'determinate')
 soignee = Label(group_sante, textvariable = sante)
-soignee.grid()
+#mise en page des indicateurs de al santé
+ma_sante.grid(row=0,column=0)
+progress_sante.grid(row=0,column=1)
+soignee.grid(row=0,column=2)
+group_sante.grid()
 
 # Frame pour sommeil et Progress bar widget pour sommeil
 group_sommeil = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
-group_sommeil.grid()
-progress_sommeil = Progressbar(group_sommeil,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_sommeil['value'] = sante.get()
-progress_sommeil.grid()
+#indicateurs de du sommeil
 mon_sommeil = Label(group_sommeil, text = "sommeil: ")
-mon_sommeil.grid()
-dormiir = Label(group_sommeil, textvariable = sommeil)
-dormiir.grid()
+progress_sommeil = Progressbar(group_sommeil,orient = HORIZONTAL,length = 100, mode = 'determinate')
+dormirLabel = Label(group_sommeil, textvariable = sommeil)
+#mise en page des indicateurs du sommeil
+mon_sommeil.grid(row=0,column=0)
+progress_sommeil.grid(row=0,column=1)
+dormirLabel.grid(row=0,column=2)
+group_sommeil.grid()
 
 # Frame pour etat général et Progress bar widget pour etat général
 group_etat = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
-group_etat.grid()
-progress_etat = Progressbar(group_etat,orient = HORIZONTAL,length = 100, mode = 'determinate')
-progress_etat['value'] = etat.get()  
-progress_etat.grid()
+#indicateurs de l'etat général
 info_etat = Label(group_etat, text = "etat general:")
-info_etat.grid()
+progress_etat = Progressbar(group_etat,orient = HORIZONTAL,length = 100, mode = 'determinate')
 etat_general = Label(group_etat,  textvariable=etat)
-etat_general.grid()
+#mise en page des indicateurs de l'etat général
+info_etat.grid(row=0,column=0)
+progress_etat.grid(row=0,column=1)
+etat_general.grid(row=0,column=2)
+group_etat.grid()
 
-
+# Frame pour l'age
+Frame_age = Frame(Frame_indicateur,   width=100,height=40,bd=4, bg="light grey")
+#indicateurs de l'age
+info_age = Label(Frame_age, text = "Mon age:")
+progress_age = Progressbar(Frame_age,orient = HORIZONTAL,length = 100, mode = 'determinate')
+age_tama = Label(Frame_age, textvariable=age)
+#mise en page des indicateurs de l'age
+info_age.grid(row=0,column=0)
+progress_age.grid(row=0,column=1)
+age_tama.grid(row=0,column=2)
+Frame_age.grid()
 
 #boutons pour interagir avec le tamagoshi
 Frame_button = Frame(ma_fenetre, width=900,height=200,bd=10, bg="grey")
@@ -247,12 +321,28 @@ faire_dormir.grid(row=0,column=4)
 mon_label = Label(Frame_button, textvariable=dormir)
 mon_label.grid(row=0,column=5)
 
+faire_reveiller = Button(Frame_button,text="reveiller",font =("Comic sans", 15), command = reveiller)
+faire_dormir.grid(row=0,column=4)
+faire_reveiller.pack_forget()
+# focntions à exxecuter par le thread de vivre
+def runGame():
+    while True:
+        time.sleep(difficulte)
+        monTamagotchi.vivre()
+        updateGui()
+        print("Un an de vie en plus")
+        if monTamagotchi.getState() == "mort":
+            print("Tamagotchi mort à l'age de: ",monTamagotchi.getAge()," ans")
+            return
 
-#Thread pour executer en boucle la fonction vivre
-vivreThread = Thread(target=runGame)
+# Focntion qui lance le jeux appelé ue fois que le joueur à donné un nom         
+def lancerJeu():
+    #Thread pour executer en boucle la fonction vivre
+    vivreThread = Thread(target=runGame)
+    #initialisations de l'interface graphique
+    updateGui()
+    #lancement du jeu
+    vivreThread.start()
 
-#initialisations de l'interface graphique
-updateGui()
-#lancement du jeu
-vivreThread.start()
+ma_fenetre.after_idle(nextImageFrame)
 ma_fenetre.mainloop()
