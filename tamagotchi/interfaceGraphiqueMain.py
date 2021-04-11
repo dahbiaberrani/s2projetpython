@@ -38,7 +38,8 @@ def updateProgressBarColor(progressbar, value):
         progressbar.configure(style="orange.Horizontal.TProgressbar")  
     else:
         progressbar.configure(style="green.Horizontal.TProgressbar")
-# foction pour mettre a jour la progress bar de l'age (les couleurs fonctionnent à l'inverse des autres bars)
+
+# foction pour mettre a jour la couleur de la progress bar de l'age (les couleurs fonctionnent à l'inverse des autres bars)
 # a l'etat très vieux (age > 90 ans) la couleur est rouge
 # a l'etat vieux (age > 70 ans) la couleur est orange
 # a l'etat jeune (age < 70 ans) la couleur est verte
@@ -88,19 +89,19 @@ def updateGuiAge(_age):
     progress_age['value'] = _age
     updateAgeProbressBarColor(_age)
 
-# focntion de mise à jour de l'image affichée selon l'activité actuelle de tamagotchi
+# focntion de mise à jour de l'image affichée selon l'activité (Etat) actuelle de tamagotchi
 def updateGuiImage(_state):
     # variable globale de la photo msie dans le caneva
     global photo
         
     if _state == "mort":
-        photo = photo = PhotoImage(file ='./ressources/tamagotchi_mort.gif')
+        photo = PhotoImage(file ='./ressources/tamagotchi_mort.gif')
         can1.configure(bg='red')
     elif _state == "dort":
-        photo = photo = PhotoImage(file ='./ressources/tamagotchi_dorme.gif')
+        photo = PhotoImage(file ='./ressources/tamagotchi_dorme.gif')
         can1.configure(bg='black')
     elif _state == "malade" :
-        photo = photo = PhotoImage(file ='./ressources/tamagotchi_malade.gif')
+        photo = PhotoImage(file ='./ressources/tamagotchi_malade.gif')
         can1.configure(bg='orange')
     else: #normal
         photo = PhotoImage(file ='./ressources/tamagotchi_normal.gif')
@@ -135,17 +136,15 @@ def enableActionButtons():
 def updateGuiButtons(_state):
     if _state != "mort":
         if _state == "dort":
-            faire_dormir.configure(text="reveiller",command = reveiller)
             disableActionButtons()       
         else:
-            faire_dormir.configure(text="dormir",command = dormir)
             enableActionButtons()
     else:
         #si mort alors detruire tous les boutons d'interactions
         Frame_button.destroy()
 
             
-
+# Fonction pour animer les images gif
 def nextImageFrame():
     global gif_index
     if monTamagotchi.getState() != "mort":
@@ -158,7 +157,7 @@ def nextImageFrame():
         else:
             ma_fenetre.after(gifRefreshIntervalTime, nextImageFrame)
 
-#Fonction pour la mise à jour de tous les élements de l'interface graphique
+#Fonction pour la mise à jour de tous les élements d'affichage de l'interface graphique
 def updateGui():
     updateGuiSoif(monTamagotchi.getSoif())
     updateGuiFaim(monTamagotchi.getFaim())
@@ -170,14 +169,12 @@ def updateGui():
     updateGuiImage(monTamagotchi.getState())
     updateGuiButtons(monTamagotchi.getState())
 
-#Fonctions d'action sur le tamagotchi
+#Fonctions d'actions sur le tamagotchi
 def mon_nom():
     nomDonne = nom_choisi.get()
     if nomDonne != "":
         monTamagotchi.setName(nomDonne)
         nom.set(monTamagotchi.getName())
-        nom_entry.destroy()
-        nom_button.destroy()
         lancerJeu()
 
 def selectDifficulte():
@@ -232,7 +229,6 @@ nom_choisi = StringVar()
 
 
 #informations et apramètres à choisir par l'utlisateur avant le lancement du jeu 
-
 # Choix du niom du tamagotchi
 Frame_info = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_info.grid(row=0,column=1)
@@ -260,7 +256,7 @@ R2.select() # niveau moyen selectionner par defaut
 R2.pack( anchor = W )
 
 R3 = Radiobutton(Frame_difficulte , text="Difficile", variable=choixDifficulteJeu, value=5,command=selectDifficulte)
-R3.pack( anchor = W )*
+R3.pack( anchor = W )
 
 #Photo représentative de Tamagotchi
 can1 = Canvas(Frame_info, width =500, height =600, bg ='green')
@@ -268,7 +264,7 @@ photo = PhotoImage(file ='./ressources/tamagotchi_welcome.gif')
 item = can1.create_image(180, 210,  image =photo)
 can1.grid(row=4,column=2) 
 
-#statisitques, ses barres d'état en théorie
+#statisitques, ses barres d'état 
 Frame_indicateur = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 
 
@@ -388,14 +384,15 @@ faire_reveiller = Button(Frame_button,text="reveiller",font =("Comic sans", 15),
 
 # focntions à exxecuter par le thread de vivre
 def runGame():
-    while True:
-        time.sleep(difficulte)
+    # tant que  tamagotchi n'est pas mort
+    while monTamagotchi.getState() != "mort":
+        #time.sleep(difficulte)
         monTamagotchi.vivre()
         updateGui()
         print("Un an de vie en plus")
-        if monTamagotchi.getState() == "mort":
-            print("Tamagotchi mort à l'age de: ",monTamagotchi.getAge()," ans")
-            return
+    # Tamagothi mort
+    print("Tamagotchi mort à l'age de: ",monTamagotchi.getAge()," ans")
+            
 
 # Focntion qui lance le jeux appelé ue fois que le joueur à donné un nom         
 def lancerJeu():
@@ -405,6 +402,8 @@ def lancerJeu():
     Frame_button.grid(row=1,column=1)
     Frame_indicateur.grid(row=0,column=0)
     Frame_difficulte.destroy()
+    nom_entry.destroy()
+    nom_button.destroy()
     updateGui()
     #lancement du jeu
     vivreThread.start()

@@ -19,10 +19,11 @@ class Tamagotchi:
         self.humeur = DEFAULT_NUMERIC_VALUE 
         self.sommeil = DEFAULT_NUMERIC_VALUE 
         self.sante = DEFAULT_NUMERIC_VALUE 
-        self.age = 0
+        self.age = 0 
+        self.sleeping = False
+        #Caractéristiques calculées à partir des autres caractéristiques
         self.etat = (self.humeur + self.sante + self.faim + self.sommeil + self.soif) / 5
         self.state = "normal"
-        self.sleeping = False
 
     # Impression
     def __str__(self):
@@ -115,12 +116,14 @@ class Tamagotchi:
 
         
     # Fonction qui permet de vivre un instant de la vie, 
-    # elle décrémente les caractéristiques d'un nombre aléatoire compris entre 1 et 10 si tamagotchi ne dort pas le someil est aussi diminué
+    # elle décrémente les caractéristiques d'un nombre aléatoire compris entre 1 et 10 
+    # si tamagotchi ne dort pas le someil est aussi diminué d'un nombre aléatoir entre 1 et 10
     # si tamagotchi dort alors le sommeil est incrémenté de 15.
+    # l'Age est à cahque fois incrémenté de 1
    
     def vivre(self):     
         #Generation de 5 nombres alétoires compris entre 1 et 10
-        randomlist = random.sample(range(1,10 ), 5)
+        randomlist = random.sample(range(1,10), 5)
 
         self.setSante(self.sante - randomlist[0])
         self.setFaim(self.faim - randomlist[1])
@@ -133,7 +136,7 @@ class Tamagotchi:
             self.setSommeil(self.sommeil + 15)
                 
 
-    #Fonctions d'action sur le  ne marche que si tamagotchi ne dort pas
+    #Fonctions d'actions sur le  taagotchi, ne marchent que si tamagotchi ne dort pas
     #Si tamagotchi dort uniquement la focntion reveiller fonctionne
     def boireEau(self):
         if not self.sleeping:
@@ -175,4 +178,3 @@ class Tamagotchi:
         self.sleeping = False
         self.updateState()
    
-
