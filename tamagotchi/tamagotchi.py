@@ -1,5 +1,5 @@
 import random
-#Valeur par defaut des carctéristique numériques à la naissance de Tamagotchi (au démarrage du jeu)
+#Valeur par defaut des carctéristiques numériques à la naissance de Tamagotchi (au démarrage du jeu)
 DEFAULT_NUMERIC_VALUE = 60
 #Fonction pour ne par dépasser 100% ou descendre en dessous de 0% des caractéristiques
 def valeurEntreBorne(valeur):
@@ -62,7 +62,8 @@ class Tamagotchi:
     
     #setters
     #Fonctionnent uniquement si tamagotchi n'est pas mort
-    #Le maximum des caractéristique est de 100%
+    #Le maximum des caractéristiques est de 100%
+    #Le minimum des caractéristiques et de 0%
     def setName(self,_name):
         self.name = _name
 
@@ -96,7 +97,6 @@ class Tamagotchi:
             self.age = valeurEntreBorne(_age)
             self.updateCalculatedCaracteristics()
         
-
     def updateState(self):
         if self.age == 100 or self.faim == 0 or self.soif == 0 or self.humeur ==0 or self.sante == 0 or self.sommeil == 0 or self.etat < 15:
             self.state = "mort"
@@ -114,13 +114,11 @@ class Tamagotchi:
         self.updateEtat() 
         self.updateState()
 
-        
     # Fonction qui permet de vivre un instant de la vie, 
     # elle décrémente les caractéristiques d'un nombre aléatoire compris entre 1 et 10 
     # si tamagotchi ne dort pas le someil est aussi diminué d'un nombre aléatoir entre 1 et 10
     # si tamagotchi dort alors le sommeil est incrémenté de 15.
     # l'Age est à cahque fois incrémenté de 1
-   
     def vivre(self):     
         #Generation de 5 nombres alétoires compris entre 1 et 10
         randomlist = random.sample(range(1,10), 5)
@@ -135,7 +133,6 @@ class Tamagotchi:
         else:
             self.setSommeil(self.sommeil + 15)
                 
-
     #Fonctions d'actions sur le  taagotchi, ne marchent que si tamagotchi ne dort pas
     #Si tamagotchi dort uniquement la focntion reveiller fonctionne
     def boireEau(self):
@@ -148,24 +145,20 @@ class Tamagotchi:
             self.setSommeil(self.sommeil + 10)
             self.setSante(self.sante - 5)
      
-    
     def mangerGateau(self):
         if not self.sleeping:
-            self.setFaim(self.faim + 15)
+            self.setFaim(self.faim + 10)
             self.setHumeur(self.humeur + 10)
             self.setSante(self.sante - 5)
 
-
     def mangerSalade(self):
         if not self.sleeping:
-            self.setFaim(self.faim + 10)
+            self.setFaim(self.faim + 15)
      
-
     def jouer(self):
         if not self.sleeping:
             self.setHumeur(self.humeur + 10)
    
-    
     def soigner(self):
         if not self.sleeping:
             self.setSante(self.sante + 20)
@@ -177,4 +170,3 @@ class Tamagotchi:
     def reveiller(self):
         self.sleeping = False
         self.updateState()
-   

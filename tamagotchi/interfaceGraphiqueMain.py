@@ -5,10 +5,10 @@ import time
 from threading import Thread
 from tamagotchi import *
 ma_fenetre = Tk()
-ma_fenetre.title("Mon tamagotchi")
+ma_fenetre.title("Tamagotchi-2021")
 monTamagotchi = Tamagotchi()
 #Parametres du jeux
-difficulte = 10
+difficulte = 7
 
 #paramètres pour l'animation des images gif
 gif_index = 0
@@ -248,14 +248,14 @@ Frame_difficulte = Frame(ma_fenetre, width=900,height=200,bd=10, bg="white")
 Frame_difficulte .grid(row=0,column=0)
 
 choixDifficulteJeu = IntVar()
-R1 = Radiobutton(Frame_difficulte , text="Facile", variable=choixDifficulteJeu, value = 25,command=selectDifficulte)
+R1 = Radiobutton(Frame_difficulte , text="Facile", variable=choixDifficulteJeu, value = 15,command=selectDifficulte)
 R1.pack( anchor = W )
 
-R2 = Radiobutton(Frame_difficulte , text="Moyen", variable=choixDifficulteJeu, value=10,command=selectDifficulte)
+R2 = Radiobutton(Frame_difficulte , text="Moyen", variable=choixDifficulteJeu, value=7,command=selectDifficulte)
 R2.select() # niveau moyen selectionner par defaut
 R2.pack( anchor = W )
 
-R3 = Radiobutton(Frame_difficulte , text="Difficile", variable=choixDifficulteJeu, value=5,command=selectDifficulte)
+R3 = Radiobutton(Frame_difficulte , text="Difficile", variable=choixDifficulteJeu, value=3,command=selectDifficulte)
 R3.pack( anchor = W )
 
 #Photo représentative de Tamagotchi
