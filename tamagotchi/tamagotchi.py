@@ -98,7 +98,7 @@ class Tamagotchi:
         
 
     def updateState(self):
-        if self.age == 100 or self.faim == 0 or self.soif == 0 or self.humeur ==0 or self.sante == 0 or self.sommeil == 0:
+        if self.age == 100 or self.faim == 0 or self.soif == 0 or self.humeur ==0 or self.sante == 0 or self.sommeil == 0 or self.etat < 15:
             self.state = "mort"
         elif self.sleeping:
             self.state = "dort"
@@ -131,7 +131,7 @@ class Tamagotchi:
         self.setSoif(self.soif - randomlist[3])
         self.setAge(self.age + 1) 
         if not self.sleeping:
-                self.setSommeil(self.sommeil - randomlist[4])      
+            self.setSommeil(self.sommeil - randomlist[4])      
         else:
             self.setSommeil(self.sommeil + 15)
                 

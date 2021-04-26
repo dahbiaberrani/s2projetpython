@@ -386,7 +386,7 @@ faire_reveiller = Button(Frame_button,text="reveiller",font =("Comic sans", 15),
 def runGame():
     # tant que  tamagotchi n'est pas mort
     while monTamagotchi.getState() != "mort":
-        #time.sleep(difficulte)
+        time.sleep(difficulte)
         monTamagotchi.vivre()
         updateGui()
         print("Un an de vie en plus")
