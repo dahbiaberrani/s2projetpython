@@ -1,6 +1,8 @@
 Ingénierie des systèmes interactifs Licence II MIASHS 2020-2021
 Groupe G2 : Dahbia BERRANI, Louna HAMNICH, Claire BUREL
 
+Pour jouer, lancez le fichier interfaceGraphiqueMain.py
+
 Il s’agit de réaliser un Tamagotchi.
 Vous trouverez une présentation d’origine (1997) ici :
 https://www.lemonde.fr/archives/article/1997/01/24/les-japonais-inventent-l-animal-domestique-virtuel_3744227_1819218.html
