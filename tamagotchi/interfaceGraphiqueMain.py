@@ -4,9 +4,11 @@ from tkinter.ttk import Progressbar
 import time
 from threading import Thread
 from tamagotchi import *
+
 ma_fenetre = Tk()
 ma_fenetre.title("Tamagotchi-2021")
 monTamagotchi = Tamagotchi()
+
 #Parametres du jeux
 difficulte = 7
 
@@ -131,8 +133,6 @@ def enableActionButtons():
     #Désactivation du bouton reveiller
     faire_reveiller.grid_forget()
 
-
-
 def updateGuiButtons(_state):
     if _state != "mort":
         if _state == "dort":
@@ -142,8 +142,7 @@ def updateGuiButtons(_state):
     else:
         #si mort alors detruire tous les boutons d'interactions
         Frame_button.destroy()
-
-            
+           
 # Fonction pour animer les images gif
 def nextImageFrame():
     global gif_index
@@ -213,7 +212,6 @@ def reveiller():
     monTamagotchi.reveiller()
     updateGui()
 
-
 faim = IntVar()
 soif = IntVar()
 humeur = IntVar()
@@ -223,10 +221,6 @@ age = IntVar()
 etat = IntVar()
 nom = StringVar()
 nom_choisi = StringVar()
-
-
-
-
 
 #informations et apramètres à choisir par l'utlisateur avant le lancement du jeu 
 # Choix du niom du tamagotchi
