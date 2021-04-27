@@ -1,3 +1,7 @@
+'''
+Ingénierie des systèmes interactifs Licence II MIASHS 2020-2021
+Groupe G2 : Dahbia BERRANI, Louna HAMNICH, Claire BUREL
+'''
 import random
 #Valeur par defaut des carctéristiques numériques à la naissance de Tamagotchi (au démarrage du jeu)
 DEFAULT_NUMERIC_VALUE = 60
